@@ -13,6 +13,8 @@ namespace Easyfmod
         public Sound sound_instance;
         public Channel fmod_channel;
         public ChannelGroup master_channelgroup;
+        FMOD.DSP dsp = null;
+        DSPConnection dspc = null;
         public EasyFmod()
         {
             fmod_system = new FMOD.System();
@@ -66,6 +68,67 @@ namespace Easyfmod
         public void setPlayPosition(float position,TIMEUNIT timeunit)
         {
             fmod_channel.setPosition((uint)position,timeunit);
+            return;
+        }
+        public void SetTempo(float value)
+        {
+            float old = 0;
+            fmod_channel.getFrequency(ref old);
+            if (value == 1)
+            {
+                fmod_channel.setFrequency(old - 6000);
+            }
+            if (value == 2)
+            {
+                fmod_channel.setFrequency(old - 5000);
+            }
+            if (value == 3)
+            {
+                fmod_channel.setFrequency(old - 4000);
+            }
+            if (value == 4)
+            {
+                fmod_channel.setFrequency(old - 3000);
+            }
+            if (value == 5)
+            {
+                fmod_channel.setFrequency(old - 2000);
+            }
+            if (value == 6)
+            {
+                fmod_channel.setFrequency(old);
+            }
+            if (value == 7)
+            {
+                fmod_channel.setFrequency(old + 1000);
+            }
+            if (value == 8)
+            {
+                fmod_channel.setFrequency(old + 3000);
+            }
+            if (value == 9)
+            {
+                fmod_channel.setFrequency(old + 5000);
+            }
+            if (value == 10)
+            {
+                fmod_channel.setFrequency(old + 7000);
+            }
+            if (value == 11)
+            {
+                fmod_channel.setFrequency(old + 9000);
+            }
+            if (value == 12)
+            {
+                fmod_channel.setFrequency(49000);
+            }
+        }
+        public void SetPitch(float value)
+        {
+         if(dsp!=null)dsp.release();
+         fmod_system.createDSPByType(DSP_TYPE.PITCHSHIFT,ref dsp);
+          fmod_channel.addDSP(dsp,ref dspc);
+            dsp.setParameter((int)DSP_PITCHSHIFT.PITCH, 1.0f + ((1.0f / 12.0f) * value));
             return;
         }
         public uint getPositionLength(TIMEUNIT timeunit)
