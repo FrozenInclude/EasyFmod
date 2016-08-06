@@ -3,37 +3,61 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using FMOD;
 
 namespace Easyfmod
 {
-    public  class EasyFmod
+    public enum EasyFmodReverbpreset {UNDERWATER,CAVE,CONCERTHALL,CITY,HALLWAY,LIVINGROOM,PARKINGLOT,ARENA,BATHROOM,PLAIN,HANGAR,FOREST,MOUNTAIN,STONEROOM,ALLEY,PIPE, AUDITORIUM,CARPETTEDHALLWAY,QUARRY};
+    public class EasyFmod
     {
+
         public FMOD.System fmod_system;
         public Sound sound_instance;
         public Channel fmod_channel;
         public ChannelGroup master_channelgroup;
-        FMOD.DSP dsp = null;
-        DSPConnection dspc = null;
+        private FMOD.DSP dsp = null;
+        private DSPConnection dspc = null;
+        private REVERB_PROPERTIES reverbEffect;
         public EasyFmod()
         {
             fmod_system = new FMOD.System();
             sound_instance = new Sound();
             fmod_channel = new Channel();
             master_channelgroup = new ChannelGroup();
-           Factory.System_Create(ref fmod_system);
-            fmod_system.init(32, FMOD.INITFLAGS.NORMAL, (IntPtr)null);
-            fmod_system.setStreamBufferSize(64 * 1024, FMOD.TIMEUNIT.RAWBYTES);
+            Factory.System_Create(ref fmod_system);
+            if (fmod_system.init(32, FMOD.INITFLAGS.NORMAL, (IntPtr)null) != RESULT.OK &&
+              fmod_system.setStreamBufferSize(64 * 1024, FMOD.TIMEUNIT.RAWBYTES) != RESULT.OK)
+            {
+                return;
+            }
         }
-       public void CreateStream(string mp3Path,MODE stereamMod)
+        public uint getVersion(bool checknewest = false)
         {
-            sound_instance.release();
-            fmod_system.createStream(mp3Path,stereamMod, ref sound_instance);
-            return;
+            uint version = 0;
+            if (fmod_system.getVersion(ref version) != RESULT.OK) {
+                return 0;
+            }
+            if (checknewest)
+            {
+                if (version < FMOD.VERSION.number)
+                {
+                    MessageBox.Show("fmod 라이브러리의 최신버전이 발견되었습니다." + version.ToString("X") + ".현재프로그램버전:" + FMOD.VERSION.number.ToString("X") + ".");
+                    Application.Exit();
+                }
+            }
+            return version;
+        }
+        public void CreateStream(string mp3Path, MODE stereamMod)
+        {
+            if (sound_instance.release() != RESULT.OK && fmod_system.createStream(mp3Path, stereamMod, ref sound_instance) != RESULT.OK)
+            {
+                return;
+            }
         }
         public void PlaySound(CHANNELINDEX channel)
         {
-           fmod_channel.stop();
+            fmod_channel.stop();
             fmod_system.playSound(channel, sound_instance, false, ref fmod_channel);
             fmod_channel.setChannelGroup(master_channelgroup);
             return;
@@ -50,7 +74,7 @@ namespace Easyfmod
         }
         public bool GetPause()
         {
-            bool paused=false;
+            bool paused = false;
             fmod_channel.getPaused(ref paused);
             return paused;
         }
@@ -65,9 +89,9 @@ namespace Easyfmod
             fmod_channel.getPosition(ref ms, timeunit);
             return ms;
         }
-        public void setPlayPosition(float position,TIMEUNIT timeunit)
+        public void setPlayPosition(float position, TIMEUNIT timeunit)
         {
-            fmod_channel.setPosition((uint)position,timeunit);
+            fmod_channel.setPosition((uint)position, timeunit);
             return;
         }
         public void SetTempo(float value)
@@ -78,56 +102,197 @@ namespace Easyfmod
             {
                 fmod_channel.setFrequency(old - 6000);
             }
-            if (value == 2)
+            else if (value == 2)
             {
                 fmod_channel.setFrequency(old - 5000);
             }
-            if (value == 3)
+            else if (value == 3)
             {
                 fmod_channel.setFrequency(old - 4000);
             }
-            if (value == 4)
+            else if (value == 4)
             {
                 fmod_channel.setFrequency(old - 3000);
             }
-            if (value == 5)
+            else if (value == 5)
             {
                 fmod_channel.setFrequency(old - 2000);
             }
-            if (value == 6)
+            else if (value == 6)
             {
                 fmod_channel.setFrequency(old);
             }
-            if (value == 7)
+            else if (value == 7)
             {
                 fmod_channel.setFrequency(old + 1000);
             }
-            if (value == 8)
+            else if (value == 8)
             {
                 fmod_channel.setFrequency(old + 3000);
             }
-            if (value == 9)
+            else if (value == 9)
             {
                 fmod_channel.setFrequency(old + 5000);
             }
-            if (value == 10)
+            else if (value == 10)
             {
                 fmod_channel.setFrequency(old + 7000);
             }
-            if (value == 11)
+            else if (value == 11)
             {
                 fmod_channel.setFrequency(old + 9000);
             }
-            if (value == 12)
+            else if (value == 12)
             {
                 fmod_channel.setFrequency(49000);
+            }
+            else
+            {
+                return;
+            }
+            return;
+        }
+        public void SetReverbEffect(EasyFmodReverbpreset preset)
+        { 
+             if (preset == EasyFmodReverbpreset.CAVE)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+              reverbEffect= a.CAVE();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.CONCERTHALL)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.CONCERTHALL();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.QUARRY)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.QUARRY();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.CITY)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.CITY();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.UNDERWATER)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.UNDERWATER();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.HALLWAY)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.HALLWAY();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.LIVINGROOM)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.LIVINGROOM();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.PARKINGLOT)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.PARKINGLOT();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.BATHROOM)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.BATHROOM();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.ARENA)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.ARENA();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.PLAIN)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.PLAIN();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.HANGAR)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.HANGAR();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.MOUNTAIN)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.MOUNTAINS();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.FOREST)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.FOREST();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.STONEROOM)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.STONEROOM();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.AUDITORIUM)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.AUDITORIUM();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.PIPE)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.SEWERPIPE();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.CARPETTEDHALLWAY)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.CARPETTEDHALLWAY();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.ALLEY)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.ALLEY();
+                fmod_system.setReverbProperties(ref reverbEffect);
             }
         }
         public void SetPitch(float value)
         {
          if(dsp!=null)dsp.release();
          fmod_system.createDSPByType(DSP_TYPE.PITCHSHIFT,ref dsp);
-          fmod_channel.addDSP(dsp,ref dspc);
+          fmod_system.addDSP(dsp,ref dspc);
             dsp.setParameter((int)DSP_PITCHSHIFT.PITCH, 1.0f + ((1.0f / 12.0f) * value));
             return;
         }
@@ -151,6 +316,10 @@ namespace Easyfmod
         TimeSpan ds = TimeSpan.FromMilliseconds(num);
             return ds.Minutes.ToString("0") + ":" + ds.Seconds.ToString("00");
         }
-      
+      private void initreverb()
+        {
+            reverbEffect = new REVERB_PROPERTIES();
+            return;
+        }
     }
 }

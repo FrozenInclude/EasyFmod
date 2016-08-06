@@ -8,10 +8,7 @@ using Easyfmod;
 
 namespace Easyfmod
 {
-    public class EasyFmodEffect
-    {
         public enum EasyFmodSoundeffect { LOWPASS, HIGHPASS, ECHO, CHORUS, FLANGE, SFXREVERVE, ITLOWPASS, SHIFTFX, DISTORTION, PARAMEQ, SIMPLE_LOWPASS };
-    }
     public class EasyFmodSoundEffect
     {
         private EasyFmod easyF;
@@ -21,28 +18,28 @@ namespace Easyfmod
         private DSPConnection VSTDSPCONNEC;
         private DSPConnection soundEFFDSPConnection;
         private uint DSPhandler;
-        public EasyFmodSoundEffect(EasyFmod easy, EasyFmodEffect.EasyFmodSoundeffect a)
+        public EasyFmodSoundEffect(EasyFmod easy, EasyFmodSoundeffect a)
         {
             easyF = easy;
-            if (a == EasyFmodEffect.EasyFmodSoundeffect.CHORUS)
+            if (a == EasyFmodSoundeffect.CHORUS)
                 easyF.fmod_system.createDSPByType(FMOD.DSP_TYPE.CHORUS, ref soundEFFDsp);
-            else if (a == EasyFmodEffect.EasyFmodSoundeffect.LOWPASS)
+            else if (a == EasyFmodSoundeffect.LOWPASS)
                 easyF.fmod_system.createDSPByType(FMOD.DSP_TYPE.LOWPASS, ref soundEFFDsp);
-            else if (a == EasyFmodEffect.EasyFmodSoundeffect.HIGHPASS)
+            else if (a == EasyFmodSoundeffect.HIGHPASS)
                 easyF.fmod_system.createDSPByType(FMOD.DSP_TYPE.HIGHPASS, ref soundEFFDsp);
-            else if (a == EasyFmodEffect.EasyFmodSoundeffect.SFXREVERVE)
+            else if (a == EasyFmodSoundeffect.SFXREVERVE)
                 easyF.fmod_system.createDSPByType(FMOD.DSP_TYPE.SFXREVERB, ref soundEFFDsp);
-            else if (a == EasyFmodEffect.EasyFmodSoundeffect.ITLOWPASS)
+            else if (a == EasyFmodSoundeffect.ITLOWPASS)
                 easyF.fmod_system.createDSPByType(FMOD.DSP_TYPE.ITLOWPASS, ref soundEFFDsp);
-            else if (a == EasyFmodEffect.EasyFmodSoundeffect.ECHO)
+            else if (a == EasyFmodSoundeffect.ECHO)
                 easyF.fmod_system.createDSPByType(FMOD.DSP_TYPE.ECHO, ref soundEFFDsp);
-            else if (a == EasyFmodEffect.EasyFmodSoundeffect.DISTORTION)
+            else if (a == EasyFmodSoundeffect.DISTORTION)
                 easyF.fmod_system.createDSPByType(FMOD.DSP_TYPE.DISTORTION, ref soundEFFDsp);
-            else if (a == EasyFmodEffect.EasyFmodSoundeffect.PARAMEQ)
+            else if (a == EasyFmodSoundeffect.PARAMEQ)
                 easyF.fmod_system.createDSPByType(FMOD.DSP_TYPE.PARAMEQ, ref soundEFFDsp);
-            else if (a == EasyFmodEffect.EasyFmodSoundeffect.SIMPLE_LOWPASS)
+            else if (a == EasyFmodSoundeffect.SIMPLE_LOWPASS)
                 easyF.fmod_system.createDSPByType(FMOD.DSP_TYPE.LOWPASS_SIMPLE, ref soundEFFDsp);
-            else if (a == EasyFmodEffect.EasyFmodSoundeffect.FLANGE)
+            else if (a == EasyFmodSoundeffect.FLANGE)
                 easyF.fmod_system.createDSPByType(FMOD.DSP_TYPE.FLANGE, ref soundEFFDsp);
         }
         public void SetEffect()
