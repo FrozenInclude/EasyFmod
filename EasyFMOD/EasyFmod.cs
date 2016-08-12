@@ -8,10 +8,9 @@ using FMOD;
 
 namespace Easyfmod
 {
-    public enum EasyFmodReverbpreset {UNDERWATER,CAVE,CONCERTHALL,CITY,HALLWAY,LIVINGROOM,PARKINGLOT,ARENA,BATHROOM,PLAIN,HANGAR,FOREST,MOUNTAIN,STONEROOM,ALLEY,PIPE, AUDITORIUM,CARPETTEDHALLWAY,QUARRY};
-    public class EasyFmod
+    public enum EasyFmodReverbpreset {UNDERWATER,CAVE,CONCERTHALL,CITY,HALLWAY,LIVINGROOM,PARKINGLOT,ARENA,BATHROOM,PLAIN,HANGAR,FOREST,MOUNTAIN,STONEROOM,ALLEY,PIPE, AUDITORIUM,GENERAL,CARPETTEDHALLWAY,QUARRY,GENERIC,ROOM};
+    public  partial class EasyFmod
     {
-
         public FMOD.System fmod_system;
         public Sound sound_instance;
         public Channel fmod_channel;
@@ -19,6 +18,10 @@ namespace Easyfmod
         private FMOD.DSP dsp = null;
         private DSPConnection dspc = null;
         private REVERB_PROPERTIES reverbEffect;
+        private string path;
+        public string PlayPath{ get {return this.path; }}
+        public uint Position { get { return getPlayPosition(TIMEUNIT.MS);}}
+        public uint Version { get { return getVersion(false); } }
         public EasyFmod()
         {
             fmod_system = new FMOD.System();
@@ -54,22 +57,40 @@ namespace Easyfmod
             {
                 return;
             }
+            this.path = mp3Path;
+  
+            if (OnCreateStream != null)
+            {
+                OnCreateStream(this, new CreateStreamEventArgs(mp3Path,stereamMod,this.fmod_system,TIMEUNIT.RAWBYTES));
+            }
         }
         public void PlaySound(CHANNELINDEX channel)
         {
             fmod_channel.stop();
             fmod_system.playSound(channel, sound_instance, false, ref fmod_channel);
             fmod_channel.setChannelGroup(master_channelgroup);
+            if (OnPlay != null)
+            {
+                OnPlay(this, new PlayEventArgs(this.path, this.fmod_system,fmod_channel, TIMEUNIT.RAWBYTES));
+            }
             return;
         }
         public void PlayStop()
         {
             fmod_channel.stop();
+            if (OnStop != null)
+            {
+                OnStop(this, new StopEventArgs(this.path, this.fmod_system, this.fmod_channel, TIMEUNIT.RAWBYTES));
+            }
             return;
         }
         public void Pause(bool pause)
         {
             fmod_channel.setPaused(true);
+            if (OnPause != null)
+            {
+                OnPause(this, new PauseEventArgs(this.path, this.fmod_system,fmod_channel, TIMEUNIT.RAWBYTES));
+            }
             return;
         }
         public bool GetPause()
@@ -92,6 +113,10 @@ namespace Easyfmod
         public void setPlayPosition(float position, TIMEUNIT timeunit)
         {
             fmod_channel.setPosition((uint)position, timeunit);
+            if (OnPositionChanged != null)
+            {
+                OnPositionChanged(this, new PositionChangedEventArgs(this.path, this.fmod_system,this.fmod_channel, TIMEUNIT.RAWBYTES));
+            }
             return;
         }
         public void SetTempo(float value)
@@ -187,6 +212,13 @@ namespace Easyfmod
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.UNDERWATER();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.GENERAL)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.OFF();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
             else if (preset == EasyFmodReverbpreset.HALLWAY)
@@ -287,6 +319,20 @@ namespace Easyfmod
                 reverbEffect = a.ALLEY();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
+            else if (preset == EasyFmodReverbpreset.GENERIC)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.GENERIC();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
+            else if (preset == EasyFmodReverbpreset.ROOM)
+            {
+                initreverb();
+                PRESET a = new PRESET();
+                reverbEffect = a.ROOM();
+                fmod_system.setReverbProperties(ref reverbEffect);
+            }
         }
         public void SetPitch(float value)
         {
@@ -319,6 +365,7 @@ namespace Easyfmod
       private void initreverb()
         {
             reverbEffect = new REVERB_PROPERTIES();
+            reverbEffect.Flags = REVERB_FLAGS.HIGHQUALITYREVERB;
             return;
         }
     }
