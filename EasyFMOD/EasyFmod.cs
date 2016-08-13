@@ -102,6 +102,10 @@ namespace Easyfmod
         public void SetVolume(float volume)
         {
             fmod_channel.setVolume(volume);
+            if (OnVolumeChanged != null)
+            {
+                OnVolumeChanged(this, new VolumeChangedEventArgs(this.path, this.fmod_system, this.fmod_channel, TIMEUNIT.RAWBYTES,volume));
+            }
             return;
         }
         public uint getPlayPosition(TIMEUNIT timeunit)
@@ -173,7 +177,15 @@ namespace Easyfmod
             }
             else
             {
+                if (OnTempoChanged != null)
+                {
+                    OnTempoChanged(this, new TempoChangedEventArgs(this.path, this.fmod_system, this.fmod_channel, TIMEUNIT.RAWBYTES,0f));
+                }
                 return;
+            }
+            if (OnTempoChanged != null)
+            {
+                OnTempoChanged(this, new TempoChangedEventArgs(this.path, this.fmod_system, this.fmod_channel, TIMEUNIT.RAWBYTES, value));
             }
             return;
         }
@@ -340,6 +352,10 @@ namespace Easyfmod
          fmod_system.createDSPByType(DSP_TYPE.PITCHSHIFT,ref dsp);
           fmod_system.addDSP(dsp,ref dspc);
             dsp.setParameter((int)DSP_PITCHSHIFT.PITCH, 1.0f + ((1.0f / 12.0f) * value));
+            if (OnPitchChanged != null)
+            {
+                OnPitchChanged(this, new PitchChangedEventArgs(this.path, this.fmod_system, this.fmod_channel, TIMEUNIT.RAWBYTES,value));
+            }
             return;
         }
         public uint getPositionLength(TIMEUNIT timeunit)
