@@ -20,8 +20,8 @@ namespace Easyfmod
         private REVERB_PROPERTIES reverbEffect;
         private string path;
         public string PlayPath{ get {return this.path; }}
-        public uint Position { get { return getPlayPosition(TIMEUNIT.MS);}}
-        public uint Version { get { return getVersion(false); } }
+        public uint Position { get { return GetPlayPosition(TIMEUNIT.MS);}}
+        public uint Version { get { return GetVersion(false); } }
         public EasyFmod()
         {
             fmod_system = new FMOD.System();
@@ -35,7 +35,7 @@ namespace Easyfmod
                 return;
             }
         }
-        public uint getVersion(bool checknewest = false)
+        public uint GetVersion(bool checknewest = false)
         {
             uint version = 0;
             if (fmod_system.getVersion(ref version) != RESULT.OK) {
@@ -108,13 +108,25 @@ namespace Easyfmod
             }
             return;
         }
-        public uint getPlayPosition(TIMEUNIT timeunit)
+        public void GetSpectrum(float[] specArr,int size,int channeloffSet,FMOD.DSP_FFT_WINDOW type)
+        {
+            fmod_system.getSpectrum(specArr,size,channeloffSet,type);
+        }
+        public void GetSoftwareFormat(ref int samplerate, ref SOUND_FORMAT format, ref int numoutputchannels, ref int maxinputchannels, ref DSP_RESAMPLER resamplemethod, ref int bits)
+        {
+            fmod_system.getSoftwareFormat(ref samplerate, ref format, ref numoutputchannels, ref maxinputchannels, ref resamplemethod, ref bits);
+        }
+        public void GetWaveData(float[] wavearray, int numvalues, int channeloffset)
+        {
+            fmod_system.getWaveData(wavearray,numvalues,channeloffset);
+        }
+        public uint GetPlayPosition(TIMEUNIT timeunit)
         {
             uint ms = 0;
             fmod_channel.getPosition(ref ms, timeunit);
             return ms;
         }
-        public void setPlayPosition(float position, TIMEUNIT timeunit)
+        public void SetPlayPosition(float position, TIMEUNIT timeunit)
         {
             fmod_channel.setPosition((uint)position, timeunit);
             if (OnPositionChanged != null)
@@ -189,156 +201,156 @@ namespace Easyfmod
             }
             return;
         }
-        public void SetReverbEffect(EasyFmodReverbpreset preset)
+        public void SetReverbEffect(EasyFmodReverbpreset PRESET)
         { 
-             if (preset == EasyFmodReverbpreset.CAVE)
+             if (PRESET == EasyFmodReverbpreset.CAVE)
             {
                 initreverb();
                 PRESET a = new PRESET();
               reverbEffect= a.CAVE();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.CONCERTHALL)
+            else if (PRESET == EasyFmodReverbpreset.CONCERTHALL)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.CONCERTHALL();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.QUARRY)
+            else if (PRESET == EasyFmodReverbpreset.QUARRY)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.QUARRY();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.CITY)
+            else if (PRESET == EasyFmodReverbpreset.CITY)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.CITY();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.UNDERWATER)
+            else if (PRESET == EasyFmodReverbpreset.UNDERWATER)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.UNDERWATER();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.GENERAL)
+            else if (PRESET == EasyFmodReverbpreset.GENERAL)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.OFF();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.HALLWAY)
+            else if (PRESET == EasyFmodReverbpreset.HALLWAY)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.HALLWAY();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.LIVINGROOM)
+            else if (PRESET == EasyFmodReverbpreset.LIVINGROOM)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.LIVINGROOM();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.PARKINGLOT)
+            else if (PRESET == EasyFmodReverbpreset.PARKINGLOT)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.PARKINGLOT();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.BATHROOM)
+            else if (PRESET == EasyFmodReverbpreset.BATHROOM)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.BATHROOM();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.ARENA)
+            else if (PRESET == EasyFmodReverbpreset.ARENA)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.ARENA();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.PLAIN)
+            else if (PRESET == EasyFmodReverbpreset.PLAIN)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.PLAIN();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.HANGAR)
+            else if (PRESET == EasyFmodReverbpreset.HANGAR)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.HANGAR();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.MOUNTAIN)
+            else if (PRESET == EasyFmodReverbpreset.MOUNTAIN)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.MOUNTAINS();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.FOREST)
+            else if (PRESET == EasyFmodReverbpreset.FOREST)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.FOREST();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.STONEROOM)
+            else if (PRESET == EasyFmodReverbpreset.STONEROOM)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.STONEROOM();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.AUDITORIUM)
+            else if (PRESET == EasyFmodReverbpreset.AUDITORIUM)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.AUDITORIUM();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.PIPE)
+            else if (PRESET == EasyFmodReverbpreset.PIPE)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.SEWERPIPE();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.CARPETTEDHALLWAY)
+            else if (PRESET == EasyFmodReverbpreset.CARPETTEDHALLWAY)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.CARPETTEDHALLWAY();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.ALLEY)
+            else if (PRESET == EasyFmodReverbpreset.ALLEY)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.ALLEY();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.GENERIC)
+            else if (PRESET == EasyFmodReverbpreset.GENERIC)
             {
                 initreverb();
                 PRESET a = new PRESET();
                 reverbEffect = a.GENERIC();
                 fmod_system.setReverbProperties(ref reverbEffect);
             }
-            else if (preset == EasyFmodReverbpreset.ROOM)
+            else if (PRESET == EasyFmodReverbpreset.ROOM)
             {
                 initreverb();
                 PRESET a = new PRESET();
@@ -358,7 +370,7 @@ namespace Easyfmod
             }
             return;
         }
-        public uint getPositionLength(TIMEUNIT timeunit)
+        public uint GetPositionLength(TIMEUNIT timeunit)
         {
             uint len = 0;
             Sound currentsound = null;
@@ -369,9 +381,9 @@ namespace Easyfmod
             }
             return len;
         }
-        public string getPlayPositionTime(TIMEUNIT timeunit)
+        public string GetPlayPositionTime(TIMEUNIT timeunit)
         {
-            return ConvertToTimeFormat(getPlayPosition(timeunit));
+            return ConvertToTimeFormat(GetPlayPosition(timeunit));
         }
         public string ConvertToTimeFormat(long num)
         {
