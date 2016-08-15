@@ -14,6 +14,7 @@ a.CreateSound("test.mp3", FMOD.MODE.SOFTWARE);
 a.PlaySound(FMOD.CHANNELINDEX.FREE);
 ```
 - play,stop,pause
+
 play
 ```js
 a.PlaySound(FMOD.CHANNELINDEX.FREE);
