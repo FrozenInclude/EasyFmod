@@ -13,6 +13,19 @@ EasyFmod a = new EasyFmod();
 a.CreateSound("test.mp3", FMOD.MODE.SOFTWARE);
 a.PlaySound(FMOD.CHANNELINDEX.FREE);
 ```
+- play,stop,pause
+play
+```js
+a.PlaySound(FMOD.CHANNELINDEX.FREE);
+```
+stop
+```js
+a.PlayStop();
+```
+pause
+```js
+a.Pause(!a.GetPause());
+```
 - Set volume
 ```js
 a.SetVolume(float);
@@ -47,6 +60,14 @@ a.SetReverbEffect(EasyFmodReverbpreset.LIVINGROOM);
 EasyFmodSoundEqualizer c=new EasyFmodSoundEqualizer(32f, 1f, 0f);
 c.SetEQ();
 ```
+- Check Fmod Version
+```js
+a.GetVersion();//return fmod version uint
+```
+if you want to check your library is the newest version
+```js
+a.GetVersion(true);
+```
 #Event
 - OnCreateStream
 - OnCreateSound
@@ -54,7 +75,6 @@ c.SetEQ();
 - OnPause
 - OnPositionChanged   
 - OnPitchChanged        
-- OnPitchChangedHandler     
 - OnTempoChanged        
 - OnVolumeChanged        
 쓰기귀찮네
