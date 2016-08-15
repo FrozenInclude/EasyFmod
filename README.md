@@ -1,5 +1,5 @@
 # EasyFmod
-You can make a music player easily with this
+You can make a music player easily.
 # How to use
 Download this project and add class files in your csproject solution
 #Basic tutorial
