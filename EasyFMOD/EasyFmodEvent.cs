@@ -25,6 +25,28 @@ namespace Easyfmod
             return size;
         }
     }
+    public class CreateSoundEventArgs : EventArgs
+    {
+        private FMOD.System system;
+        private TIMEUNIT timeunit;
+        public string FilePath { get; private set; }
+        public MODE SoundMode { get; private set; }
+        public uint BufferSize { get { return getBufferSize(); } }
+        public CreateSoundEventArgs(string FilePath, MODE SoundMode, FMOD.System system, TIMEUNIT timeunit)
+        {
+            this.FilePath = FilePath;
+            this.SoundMode = SoundMode;
+            this.system = system;
+            this.timeunit = timeunit;
+        }
+        private uint getBufferSize()
+        {
+            uint size = 0;
+            if (this.system != null)
+                system.getStreamBufferSize(ref size, ref this.timeunit);
+            return size;
+        }
+    }
     public class PlayEventArgs : EventArgs
     {
         private FMOD.System system;
@@ -237,6 +259,7 @@ namespace Easyfmod
     }
 
     public delegate void OnCreateStreamHandler(object sender, CreateStreamEventArgs e);
+    public delegate void OnCreateSoundHandler(object sender, CreateSoundEventArgs e);
     public delegate void OnPlayHandler(object sender, PlayEventArgs e);
     public delegate void OnPauseHandler(object sender, PauseEventArgs e);
     public delegate void OnPositionChangedHandler(object sender, PositionChangedEventArgs e);
@@ -248,6 +271,7 @@ namespace Easyfmod
     public partial class EasyFmod
         {
         public event OnCreateStreamHandler OnCreateStream;
+        public event OnCreateSoundHandler OnCreateSound;
         public event OnPlayHandler OnPlay;
         public event OnPauseHandler OnPause;
         public event OnPositionChangedHandler OnPositionChanged;

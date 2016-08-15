@@ -64,6 +64,19 @@ namespace Easyfmod
                 OnCreateStream(this, new CreateStreamEventArgs(mp3Path,stereamMod,this.fmod_system,TIMEUNIT.RAWBYTES));
             }
         }
+        public void CreateSound(string mp3Path, MODE stereamMod)
+        {
+            if (sound_instance.release() != RESULT.OK && fmod_system.createSound(mp3Path, stereamMod, ref sound_instance) != RESULT.OK)
+            {
+                return;
+            }
+            this.path = mp3Path;
+
+            if (OnCreateSound != null)
+            {
+                OnCreateSound(this, new CreateSoundEventArgs(mp3Path, stereamMod, this.fmod_system, TIMEUNIT.RAWBYTES));
+            }
+        }
         public void PlaySound(CHANNELINDEX channel)
         {
             fmod_channel.stop();
@@ -384,6 +397,10 @@ namespace Easyfmod
         public string GetPlayPositionTime(TIMEUNIT timeunit)
         {
             return ConvertToTimeFormat(GetPlayPosition(timeunit));
+        }
+        public string GetPositionTime(TIMEUNIT timeunit)
+        {
+            return ConvertToTimeFormat(GetPositionLength(timeunit));
         }
         public string ConvertToTimeFormat(long num)
         {
