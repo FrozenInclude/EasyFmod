@@ -71,8 +71,48 @@ a.GetVersion(true);
 ```
 #Event
 - OnCreateStream
+```cs 
+a.OnCreateStream += this.createStreamevent; 
+private void createStreamevent(object sender,CreateStreamEventArgs e)
+{
+MessageBox.Show(e.StreamMode);
+}
+```
+CreateStreamEventArgs propety
+<pre><code>FilePath:musicfile path
+
+StreamMode:stream's mode
+
+BufferSize:stream's buffer size
+</code></pre>
 - OnCreateSound
+```cs 
+a.OnCreateSound += this.createSoundevent; 
+private void createSoundevent(object sender,CreateSoundEventArgs e)
+{
+MessageBox.Show(e.SoundMode);
+}
+```
+CreateSoundEventArgs propety
+<pre><code>FilePath:musicfile path
+
+SoundMode:sound's mode
+
+BufferSize:sound's buffer size
+</code></pre>
 - OnPlay
+```cs 
+a.OnPlay += this.playevent; 
+private void playevent(object sender,PlaySoundEventArgs e)
+{
+MessageBox.Show(e.FilePath);
+}
+```
+PlaySoundEventArgs propety
+<pre><code>FilePath:musicfile path
+
+PositionLength:music file's duration length
+</code></pre>
 - OnPause
 - OnPositionChanged   
 - OnPitchChanged        
