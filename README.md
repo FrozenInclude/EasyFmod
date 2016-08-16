@@ -78,7 +78,7 @@ private void createStreamevent(object sender,CreateStreamEventArgs e)
 MessageBox.Show(e.StreamMode);
 }
 ```
-CreateStreamEventArgs propety
+CreateStreamEventArgs
 <pre><code>FilePath:musicfile path
 
 StreamMode:stream's mode
@@ -93,7 +93,7 @@ private void createSoundevent(object sender,CreateSoundEventArgs e)
 MessageBox.Show(e.SoundMode);
 }
 ```
-CreateSoundEventArgs propety
+CreateSoundEventArgs
 <pre><code>FilePath:musicfile path
 
 SoundMode:sound's mode
@@ -108,7 +108,7 @@ private void playevent(object sender,PlaySoundEventArgs e)
 MessageBox.Show(e.FilePath);
 }
 ```
-PlaySoundEventArgs propety
+PlaySoundEventArgs
 <pre><code>FilePath:musicfile path
 
 PositionLength:music file's duration length
