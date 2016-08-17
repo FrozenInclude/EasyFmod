@@ -1,7 +1,5 @@
 # EasyFmod
-You can make a music player easily.
-# How to use
-Download this project and add class files in your csproject solution
+A simple c# fmod library
 #Basic tutorial
 - Load mp3file and play
 ```js
